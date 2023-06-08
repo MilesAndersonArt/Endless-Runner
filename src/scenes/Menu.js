@@ -4,16 +4,21 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('Title', './assets/Title.png');
-        // load audio
-        this.load.audio('sfx_select', './assets/blip_select12.wav');
-        this.load.audio('sfx_explosion', './assets/explosion38.wav');
-        this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
-        this.load.audio('sfx_enemydeath_1', './assets/deathnoise1.m4a');
-        this.load.audio('sfx_enemydeath_2', './assets/deathnoise2.m4a');
-        this.load.audio('sfx_enemydeath_3', './assets/deathnoise3.m4a');
-        this.load.audio('sfx_enemydeath_4', './assets/deathnoise4.m4a');
-        this.load.audio('sfx_bonus', './assets/pickupCoin.wav')
+        //this.load.image('Title', './assets/Title.png');
+
+        // load bg music
+        this.load.audio('bg_music', './assets/sound/8BitRaceway.mp3');
+
+        //load sfx
+        this.load.audio('sfx_explosion1', './assets/sound/explosion_1.wav');
+        this.load.audio('sfx_explosion2', './assets/sound/explosion_2.wav');
+        this.load.audio('sfx_explosion3', './assets/sound/explosion_3.wav');
+        this.load.audio('sfx_explosion4', './assets/sound/explosion_4.wav');
+        this.load.audio('sfx_explosion5', './assets/sound/explosion_5.wav');
+
+        this.load.audio('sfx_death', './assets/sound/explosion_death.wav');
+        this.load.audio('sfx_shoot', './assets/sound/laserShoot.wav');
+
     }
 
     create() {
@@ -30,6 +35,13 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+
+        // loop music
+        this.game.sound.stopAll();
+        this.game.music.stopAll();
+        var bgMusic = this.game.music.add('bg_music', {volume: 0.6}); 
+        bgMusic.setLoop(true);
+        bgMusic.play();
         
         // show menu text
         this.title = this.add.sprite(game.config.width/2, game.config.height/2, 'Title');

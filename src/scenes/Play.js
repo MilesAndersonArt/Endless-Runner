@@ -4,22 +4,25 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
-        this.load.image('spaceship', './assets/spaceship.png');
+        // load player sprite
+        this.load.image('player', './assets/player/Pod.png');
 
         // scrolling tile sprites / parallax
-        this.load.image('groundfog', './assets/GroundFog.png');
-        this.load.image('clouds', './assets/Clouds.png');
-        this.load.image('redsky', './assets/RedSky.png');
+        this.load.image('background', './assets/bg/background.png');
+        this.load.image('whiterays', './assets/bg/whiterays.png');
+        this.load.image('purplepanel', './assets/bg/purplepanel.png');
+        this.load.image('redpanel', './assets/bg/redpanel.png');
+        this.load.image('yellowpanel', './assets/bg/yellowpanel.png');
 
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/creatureexplosionanim.png', {frameWidth: 64, frameHeight: 45, startFrame: 0, endFrame: 9});
-        this.load.spritesheet('bonus_explosion', './assets/BonusShip_Explode.png', {frameWidth: 43, frameHeight: 18, startFrame: 0, endFrame: 1});
+        this.load.spritesheet('shoot', './assets/anim/png/PodShoot_Anim.png', {frameWidth: 65, frameHeight: 65, startFrame: 0, endFrame: 4});
+        this.load.spritesheet('playerdeath', './assets/anim/png/DeathAnim.png', {frameWidth: 86, frameHeight: 54, startFrame: 0, endFrame: 5});
+        this.load.spritesheet('enemydeath', './assets/anim/png/EnemyDeath_Anim.png', {frameWidth: 51, frameHeight: 51, startFrame: 0, endFrame: 7});
 
         // load texture atlas
-        this.load.atlas('creature1idleatlas', 'assets/CreatureIdleAnim.png', 'assets/creatureidleanim.json');
-        this.load.atlas('bonusatlas', 'assets/BonusShip_Idle.png', 'assets/BonusShip_Idle.json');
+        this.load.atlas('enemyidle_atlas', 'assets/anim/png/diamondenemyidle.png', 'assets/anim/json/enemyidle.json');
+        this.load.atlas('bottommonolith_atlas', 'assets/anim/png/BottomMonolith_Anim.png', 'assets/anim/json/BottomMonolith.json');
+        this.load.atlas('topmonolith_atlas', 'assets/anim/png/TopMonolith_Anim.png', 'assets/anim/json/TopMonolith.json');
     }
 
     create() {
