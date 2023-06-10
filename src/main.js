@@ -8,10 +8,7 @@
     -
  
     Sources:
-    - I borrowed the speed increase code from Nhan Nguyen's Rocket Patrol mod.
-        - Credit: https://github.com/Ataru2002/Rocket-Patrol
-    - 'enemydeath' sound effects recorded by me through Voice Memos app
-    - 'pickupCoin' sound effect created with jsfxr
+    - 
 */ 
 
 let config = {
@@ -35,12 +32,6 @@ let game = new Phaser.Game(config);
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 // set play variables
-let timer = 60000;
 let highscore = 0;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE;
-// reserve mouse input variables
-let input;
-let cursorx;
-let cursory;
-let mousedown = false;
+let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE;

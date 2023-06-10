@@ -27,9 +27,17 @@ class Play extends Phaser.Scene {
 
     create() {
         // place tile sprite background
-        this.redsky = this.add.tileSprite(0, 0, 640, 480, 'redsky').setOrigin(0, 0);
-        this.clouds = this.add.tileSprite(0, 0, 640, 180, 'clouds').setOrigin(0, 0);
-        this.groundfog = this.add.tileSprite(0, 0, 640, 480, 'groundfog').setOrigin(0, 0);
+        this.background = this.add.tileSprite(0, 0, 840, 545, 'background').setOrigin(0, 0);
+        this.background.setInteractive();
+        this.whiterays = this.add.tileSprite(0, 0, 840, 545, 'whiterays').setOrigin(0, 0);
+        this.whiterays.setInteractive();
+        this.purplepanel = this.add.tileSprite(0, 0, 840, 545, 'purplepanel').setOrigin(0, 0);
+        this.purplepanel.setInteractive();
+        this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
+        this.redpanel.setInteractive();
+        this.yellowpanel = this.add.tileSprite(0, 0, 840, 545, 'yellowpanel').setOrigin(0, 0);
+        this.yellowpanel.setInteractive();
+
         // white UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0xffffff).setOrigin(0, 0);
         // black borders
@@ -89,17 +97,10 @@ class Play extends Phaser.Scene {
             repeat: -1
         })
 
-        // add Spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'bonus', 'BonusShip(1)', 40, 1).setOrigin(0, 0);
-        this.ship01.play('bonus',true);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'creature1idleatlas', 'creatureidle(1)', 20, 0).setOrigin(0,0);
-        this.ship02.play('creature',true);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'creature1idleatlas', 'creatureidle(1)', 10, 0).setOrigin(0,0);
-        this.ship03.play('creature',true);
+        // add enemies
+        
 
         // define keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
