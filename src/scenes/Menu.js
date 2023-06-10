@@ -37,9 +37,7 @@ class Menu extends Phaser.Scene {
         }
 
         // loop music
-        this.game.sound.stopAll();
-        this.game.music.stopAll();
-        var bgMusic = this.game.music.add('bg_music', {volume: 0.6}); 
+        var bgMusic = this.sound.add('bg_music', {volume: 0.6});
         bgMusic.setLoop(true);
         bgMusic.play();
         
