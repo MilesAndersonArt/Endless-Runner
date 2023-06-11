@@ -32,30 +32,99 @@ class Play extends Phaser.Scene {
         this.purplepanel = this.add.tileSprite(0, 0, 840, 545, 'purplepanel').setOrigin(0, 0);
         this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
         this.yellowpanel = this.add.tileSprite(0, 0, 840, 545, 'yellowpanel').setOrigin(0, 0);
-
         // white UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0xffffff).setOrigin(0, 0);
-        // black borders
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0 ,0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x000000).setOrigin(0 ,0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
+        // // black borders
+        // this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0 ,0);
+        // this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x000000).setOrigin(0 ,0);
+        // this.add.rectangle(0, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
+        // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
 
         // add Player
         this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
 
-        // animation config
+        // ANIMATION CONFIG
+        // laser shooting animation
+        this.anims.create({
+            key: 'shoot',
+            frames: this.anims.generateFrameNumbers('shoot', { 
+                start: 0, 
+                end: 4, 
+                first: 0
+                
+            }),
+            frameRate: 30
+        });
+        // player death animation
+        this.anims.create({
+            key: 'playerdeath',
+            frames: this.anims.generateFrameNumbers('playerdeath', { 
+                start: 0, 
+                end: 5, 
+                first: 0
+                
+            }),
+            frameRate: 30
+        });
+        // enemy death animation
+        this.anims.create({
+            key: 'enemydeath',
+            frames: this.anims.generateFrameNumbers('enemydeath', { 
+                start: 0, 
+                end: 7, 
+                first: 0
+                
+            }),
+            frameRate: 30
+        });
+
+        // TEXTURE ATLAS ANIMS
+        // enemy idle atlas
+        this.anims.create({
+            key: 'enemyidle_atlas',
+            frames: this.anims.generateFrameNames('enemyidle_atlas', {
+                prefix: 'enemy_',
+                start: 1,
+                end: 4,
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+        // bottom monolith atlas
+        this.anims.create({
+            key: 'bottommonolith_atlas',
+            frames: this.anims.generateFrameNames('bottommonolith_atlas', {
+                prefix: 'BottomMonolith_',
+                start: 1,
+                end: 4,
+            }),
+            frameRate: 4,
+            repeat: -1
+        })
+        // top monolith atlas
+        this.anims.create({
+            key: 'topmonolith_atlas',
+            frames: this.anims.generateFrameNames('topmonolith_atlas', {
+                prefix: 'TopMonolith_',
+                start: 1,
+                end: 4,
+            }),
+            frameRate: 4,
+            repeat: -1
+        })
 
         // add enemies
         
-        // set up keyboard input
-        console.log('initializing keys');
+        // Initialize Monolith variables
+
+        // SET UP KEYBOARD INPUT
+        // console.log('initializing keys');
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        console.log('keys initialized');
+        // console.log('keys initialized');
 
         // initialize score
         // this.p1Score = 0;
@@ -80,8 +149,8 @@ class Play extends Phaser.Scene {
 
     update() {
         // BG parallax scrolling
-        this.yellowpanel.tilePositionX += 6;
-        this.redpanel.tilePositionX += 8;
+        this.yellowpanel.tilePositionX += 18;
+        this.redpanel.tilePositionX += 12;
         this.purplepanel.tilePositionX += 9.5;
         this.whiterays.tilePositionX += 20;
         this.player.update();

@@ -10,7 +10,6 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
         this.setActive(false);
         this.setVisible(false);
         this.isFiring = false; // track firing status
-        //this.moveSpeed = gamespeed;
         this.sfxShoot = scene.sound.add('sfx_shoot') // add laser shoot sfx
 
     }
@@ -23,7 +22,7 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
         }
         // if fired, move right
         if(this.isFiring && this.x < game.config.width) {
-            this.setVelocityX(750);
+            this.body.setVelocityX(750);
         }
         if(this.x >= game.config.width){
             this.reset();
