@@ -27,16 +27,17 @@ class Play extends Phaser.Scene {
 
     create() {
         // place tile sprite background
-        this.background = this.add.tileSprite(0, 0, 840, 545, 'background').setOrigin(0, 0);
-        this.background.setInteractive();
-        this.whiterays = this.add.tileSprite(0, 0, 840, 545, 'whiterays').setOrigin(0, 0);
-        this.whiterays.setInteractive();
-        this.purplepanel = this.add.tileSprite(0, 0, 840, 545, 'purplepanel').setOrigin(0, 0);
-        this.purplepanel.setInteractive();
-        this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
-        this.redpanel.setInteractive();
         this.yellowpanel = this.add.tileSprite(0, 0, 840, 545, 'yellowpanel').setOrigin(0, 0);
-        this.yellowpanel.setInteractive();
+        // this.yellowpanel.setInteractive();
+        this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
+        //this.redpanel.setInteractive();
+        this.purplepanel = this.add.tileSprite(0, 0, 840, 545, 'purplepanel').setOrigin(0, 0);
+        //this.purplepanel.setInteractive();
+        this.whiterays = this.add.tileSprite(0, 0, 840, 545, 'whiterays').setOrigin(0, 0);
+        //this.whiterays.setInteractive();
+        this.background = this.add.tileSprite(0, 0, 840, 545, 'background').setOrigin(0, 0);
+        //this.background.setInteractive();
+
 
         // white UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0xffffff).setOrigin(0, 0);
@@ -139,6 +140,12 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        // BG parallax scrolling
+        this.yellowpanel.tilePositionX -= 4;
+        this.redpanel.tilePositionX -= 3;
+        this.purplepanel.tilePositionX -= 2.5;
+        this.whiteray.tilePositionX -= 0.25;
+
         cursorx = input.x;
         cursory = input.y;
         // Timer Settings
