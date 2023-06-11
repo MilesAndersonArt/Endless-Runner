@@ -42,38 +42,43 @@ class Menu extends Phaser.Scene {
         this.bgMusic.play();
         
         // show menu text
-        this.title = this.add.sprite(game.config.width/2, game.config.height/2, 'Title');
+        //this.title = this.add.sprite(game.config.width/2, game.config.height/2, 'Title');
         this.add.text(game.config.width/2 + 150, game.config.height/2 + borderUISize*2 + borderPadding*2 + 60, 'HIGH SCORE:' + highscore, menuConfig).setOrigin(0.5);
 
         // setting up player cursor
-        sceneSelect = 'playScene';
+        sceneSelect = "playScene";
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.playbutton = this.add.text(game.config.width/2, game.config.height/2 + 64, 'Play', menuConfig).setOrigin(0.5);
+        this.tutorialbutton = this.add.text(game.config.width/2, game.config.height/2 + 96, 'Tutorial', menuConfig).setOrigin(0.5);
+        this.creditsbutton = this.add.text(game.config.width/2, game.config.height/2 + 128, 'Options', menuConfig).setOrigin(0.5);
+
     }
 
     update() {
       if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
-        if(sceneSelect == 'playScene') {
-          this.updateMenu(this.playbutton, this.tutorialbutton, 'tutorialScene');
+        if(sceneSelect == "playScene") {
+          this.updateMenu(this.playbutton, this.tutorialbutton, "tutorialScene");
         }
-        else if(sceneSelect == 'tutorialScene') {
-          this.updateMenu(this.tutorialbutton, this.creditsbutton, 'creditsScene');
+        else if(sceneSelect == "tutorialScene") {
+          this.updateMenu(this.tutorialbutton, this.creditsbutton, "creditsScene");
         }
-        else if(sceneSelect == 'creditsScene') {
-          this.updateMenu(this.creditsbutton, this.playbutton, 'playScene');
+        else if(sceneSelect == "creditsScene") {
+          this.updateMenu(this.creditsbutton, this.playbutton, "playScene");
         }
       }
         if (Phaser.Input.Keyboard.JustDown(keyUP)) {
-          if(sceneSelect == 'playScene') {
-            this.updateMenu(this.playbutton, this.creditsbutton, 'creditsScene');
+          if(sceneSelect == "playScene") {
+            this.updateMenu(this.playbutton, this.creditsbutton, "creditsScene");
           }
-          else if(sceneSelect == 'tutorialScene') {
-            this.updateMenu(this.tutorialbutton, this.playbutton, 'playScene');
+          else if(sceneSelect == "tutorialScene") {
+            this.updateMenu(this.tutorialbutton, this.playbutton, "playScene");
           }
-          else if(sceneSelect == 'creditsScene') {
-            this.updateMenu(this.creditsbutton, this.tutorialbutton, 'tutorialScene');
+          else if(sceneSelect == "creditsScene") {
+            this.updateMenu(this.creditsbutton, this.tutorialbutton, "tutorialScene");
           }
         }
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
