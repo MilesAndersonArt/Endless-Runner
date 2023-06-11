@@ -9,7 +9,6 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
         // set up active and visible statuses
         this.setActive(false);
         this.setVisible(false);
-
         this.isFiring = false; // track firing status
         //this.moveSpeed = gamespeed;
         this.sfxShoot = scene.sound.add('sfx_shoot') // add laser shoot sfx
@@ -33,6 +32,8 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
     // position reset
     reset () {
         this.isFiring = false;
+        this.setActive(false);
+        this.setVisible(false);
         this.x = game.config.width;
     }
 }
