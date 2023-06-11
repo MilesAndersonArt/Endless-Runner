@@ -102,6 +102,7 @@ class Play extends Phaser.Scene {
         
 
         // define keys
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -142,9 +143,9 @@ class Play extends Phaser.Scene {
     update() {
         // BG parallax scrolling
         this.yellowpanel.tilePositionX -= 4;
-        this.redpanel.tilePositionX -= 3;
-        this.purplepanel.tilePositionX -= 2.5;
-        this.whiteray.tilePositionX -= 0.25;
+        this.redpanel.tilePositionX -= 5;
+        this.purplepanel.tilePositionX -= 6.5;
+        this.whiteray.tilePositionX -= 7.25;
 
         cursorx = input.x;
         cursory = input.y;

@@ -34,4 +34,4 @@ let borderPadding = borderUISize / 3;
 // set play variables
 let highscore = 0;
 // reserve keyboard variables
-let keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE;
+let keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keySPACE;
