@@ -10,27 +10,23 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     update() {
-        // left/right movement
-        if(!this.isFiring) {
-            if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
-                this.x -= this.moveSpeed;
-            } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
-                this.x += this.moveSpeed;
-            }
+        // horizontal movement
+        if (keyLEFT.isDown && this.x > 0) {
+            this.setVelocityX(-200);
+        } else if (keyRIGHT.isDown && this.x < config.width) {
+            this.setVelocityX(200);
+        } else {
+            this.setVelocityX(0);
         }
-        // fire button
-        if(Phaser.Input.Keyboard.JustDown(keySPACE) && !this.isFiring) {
-            this.isFiring = true;
-            this.sfxRocket.play();
+        // vertical movement
+        if(keyUP.isDown && this.y < config.height) {
+            this.setVelocityY(100);
+        } else if (keyDOWN.isDown && this.y > 0) {
+            this.setVelocityY(400);
+        } else {
+            this.setVelocityY(0);
         }
-        // if fired, move up
-        if(this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
-            this.y -= this.moveSpeed;
-        }
-        // reset on miss
-        if(this.y <= borderUISize * 3 + borderPadding) {
-            this.reset();
-        }
+        
     }
 
     // reset rocket to "ground"

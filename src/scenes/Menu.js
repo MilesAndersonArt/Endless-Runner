@@ -36,40 +36,58 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        // loop music
-        var bgMusic = this.sound.add('bg_music', {volume: 0.6});
-        bgMusic.setLoop(true);
-        bgMusic.play();
+        // set up music loop
+        this.bgMusic = this.sound.add('bg_music');
+        this.bgMusic.setLoop(true);
+        this.bgMusic.play();
         
         // show menu text
         this.title = this.add.sprite(game.config.width/2, game.config.height/2, 'Title');
         this.add.text(game.config.width/2 + 150, game.config.height/2 + borderUISize*2 + borderPadding*2 + 60, 'HIGH SCORE:' + highscore, menuConfig).setOrigin(0.5);
 
+        // setting up player cursor
+        sceneSelect = 'playScene';
         // define keys
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-          // easy mode
-          game.settings = {
-            spaceshipSpeed: 3,
-            gameTimer: 60000
-          }
-          timer = 60000
-          this.sound.play('sfx_select');
-          this.scene.start("playScene");    
+      if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+        if(sceneSelect == 'playScene') {
+          this.updateMenu(this.playbutton, this.tutorialbutton, 'tutorialScene');
         }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-          // hard mode
-          game.settings = {
-            spaceshipSpeed: 4,
-            gameTimer: 45000  
-          }
-          timer = 45000
-          this.sound.play('sfx_select');
-          this.scene.start("playScene");    
+        else if(sceneSelect == 'tutorialScene') {
+          this.updateMenu(this.tutorialbutton, this.creditsbutton, 'creditsScene');
         }
+        else if(sceneSelect == 'creditsScene') {
+          this.updateMenu(this.creditsbutton, this.playbutton, 'playScene');
+        }
+      }
+        if (Phaser.Input.Keyboard.JustDown(keyUP)) {
+          if(sceneSelect == 'playScene') {
+            this.updateMenu(this.playbutton, this.creditsbutton, 'creditsScene');
+          }
+          else if(sceneSelect == 'tutorialScene') {
+            this.updateMenu(this.tutorialbutton, this.playbutton, 'playScene');
+          }
+          else if(sceneSelect == 'creditsScene') {
+            this.updateMenu(this.creditsbutton, this.tutorialbutton, 'tutorialScene');
+          }
+        }
+        if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+          this.sound.play('sfx_shoot');
+          this.scene.start(sceneSelect);
+        }
+
   }
+  updateMenu(current, next, scene){
+    current.setColor('#F5c827');
+    current.setShadowBlur(0);
+    next.setColor('#FFFFFF');
+    next.setShadowBlur(10);
+    sceneSelect = scene;
+  }
+  
 }

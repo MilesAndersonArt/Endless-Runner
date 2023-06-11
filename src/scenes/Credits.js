@@ -1,6 +1,6 @@
 class Credits extends Phaser.Scene {
     constructor() {
-        super("playScene");
+        super("creditsScene");
     }
 
     preload(){
