@@ -35,7 +35,8 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-
+        // reset music loop
+        this.game.sound.stopAll();
         // set up music loop
         this.bgMusic = this.sound.add('bg_music');
         this.bgMusic.setLoop(true);
@@ -54,7 +55,7 @@ class Menu extends Phaser.Scene {
 
         this.playbutton = this.add.text(game.config.width/2, game.config.height/2 + 64, 'Play', menuConfig).setOrigin(0.5);
         this.tutorialbutton = this.add.text(game.config.width/2, game.config.height/2 + 96, 'Tutorial', menuConfig).setOrigin(0.5);
-        this.creditsbutton = this.add.text(game.config.width/2, game.config.height/2 + 128, 'Options', menuConfig).setOrigin(0.5);
+        this.creditsbutton = this.add.text(game.config.width/2, game.config.height/2 + 128, 'Credits', menuConfig).setOrigin(0.5);
 
     }
 
