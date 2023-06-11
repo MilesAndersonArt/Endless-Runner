@@ -8,9 +8,12 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
+        // Player Control instructions
+        
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    
     }
     
     update() {
