@@ -1,6 +1,6 @@
 class Tutorial extends Phaser.Scene {
     constructor() {
-        super("tutorialScene");
+        super("tutorialScene_1");
     }
 
     preload(){

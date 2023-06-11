@@ -61,9 +61,9 @@ class Menu extends Phaser.Scene {
     update() {
       if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
         if(sceneSelect == "playScene") {
-          this.updateMenu(this.playbutton, this.tutorialbutton, "tutorialScene");
+          this.updateMenu(this.playbutton, this.tutorialbutton, "tutorialScene_1");
         }
-        else if(sceneSelect == "tutorialScene") {
+        else if(sceneSelect == "tutorialScene_1") {
           this.updateMenu(this.tutorialbutton, this.creditsbutton, "creditsScene");
         }
         else if(sceneSelect == "creditsScene") {
@@ -74,11 +74,11 @@ class Menu extends Phaser.Scene {
           if(sceneSelect == "playScene") {
             this.updateMenu(this.playbutton, this.creditsbutton, "creditsScene");
           }
-          else if(sceneSelect == "tutorialScene") {
+          else if(sceneSelect == "tutorialScene_1") {
             this.updateMenu(this.tutorialbutton, this.playbutton, "playScene");
           }
           else if(sceneSelect == "creditsScene") {
-            this.updateMenu(this.creditsbutton, this.tutorialbutton, "tutorialScene");
+            this.updateMenu(this.creditsbutton, this.tutorialbutton, "tutorialScene_1");
           }
         }
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
