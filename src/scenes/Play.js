@@ -27,22 +27,11 @@ class Play extends Phaser.Scene {
 
     create() {
         // place tile sprite background assets
-
         this.background = this.add.tileSprite(0, 0, 840, 545, 'background').setOrigin(0, 0);
-
         this.whiterays = this.add.tileSprite(0, 0, 840, 545, 'whiterays').setOrigin(0, 0);
-        this.whiterays.setInteractive();
         this.purplepanel = this.add.tileSprite(0, 0, 840, 545, 'purplepanel').setOrigin(0, 0);
-        this.purplepanel.setInteractive();
         this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
-        this.redpanel.setInteractive();
         this.yellowpanel = this.add.tileSprite(0, 0, 840, 545, 'yellowpanel').setOrigin(0, 0);
-        this.yellowpanel.setInteractive();
-
-
-
-        
-
 
         // white UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0xffffff).setOrigin(0, 0);
@@ -53,74 +42,23 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
 
         // add Player
-        //this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
-        this.p1 = new this.Player(this, game.config.width/8, game.config.height/4, 'player');
+        this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
 
         // animation config
-
-        // this.anims.create({
-        //     key: 'explode',
-        //     frames: this.anims.generateFrameNumbers('explosion', { 
-        //         start: 0, 
-        //         end: 9, 
-        //         first: 0
-                
-        //     }),
-        //     frameRate: 30
-        // });
-
-        // this.anims.create({
-        //     key: 'bonus_explode',
-        //     frames: this.anims.generateFrameNumbers('bonus_explosion', { 
-        //         start: 0, 
-        //         end: 1, 
-        //         first: 0
-                
-        //     }),
-        //     frameRate: 30
-        // });
-
-        // texture atlas anims
-
-        // this.anims.create({
-        //     key: 'creature',
-        //     frames: this.anims.generateFrameNames('creature1idleatlas', {
-        //         prefix: 'creatureidle(',
-        //         start: 1,
-        //         end: 4,
-        //         suffix: ')'
-        //     }),
-        //     frameRate: 4,
-        //     repeat: -1
-        // })
-
-        // this.anims.create({
-        //     key: 'bonus',
-        //     frames: this.anims.generateFrameNames('bonusatlas', {
-        //         prefix: 'BonusShip(',
-        //         start: 1,
-        //         end: 2,
-        //         suffix: ')'
-        //     }),
-        //     frameRate: 2,
-        //     repeat: -1
-        // })
 
         // add enemies
         
         // set up keyboard input
-        //this.cursors = this.input.keyboard.createCursorKeys();
-        // define keys
-        //keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        console.log('initializing keys');
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
+        console.log('keys initialized');
 
         // initialize score
-        this.p1Score = 0;
+        // this.p1Score = 0;
         // display score
         let scoreConfig = {
             fontFamily: 'Courier New',
@@ -136,84 +74,24 @@ class Play extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);        
         // GAME OVER flag
-        this.gameOver = false;
+        // this.gameOver = false;
 
     }
 
     update() {
         // BG parallax scrolling
-        this.yellowpanel.tilePositionX += 4;
-        this.redpanel.tilePositionX += 5;
-        this.purplepanel.tilePositionX += 6.5;
-        this.whiterays.tilePositionX += 7.25;
-
-        // check key input for restart / menu
-        // if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-        //     highscore = Math.max(this.p1Score)
-        //     this.scene.restart();
-        //     this.gameOver = false;
-        //     // this.accelerationTrigger = true;
-        //     timer = 60000;
-        // }
-
-        // if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-        //     highscore = Math.max(this.p1Score)
-        //     this.scene.start("menuScene");
-        //     this.gameOver = false;
-        //     // this.accelerationTrigger = true;
-        //     timer = 60000;
-        // }
-
-        if(!this.gameOver) {
-            this.p1.update();             // update p1
-        }
-
-        // check collisions
-
-    // shipExplode(ship) {
-    //     // temporarily hide ship
-    //     ship.alpha = 0;                         
-    //     // create explosion sprite at ship's position
-    //     let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
-    //     boom.anims.play('explode');             // play explode animation
-    //     boom.on('animationcomplete', () => {    // callback after anim completes
-    //         ship.reset();                         // reset ship position
-    //         ship.alpha = 1;                       // make ship visible again
-    //         boom.destroy();                       // remove explosion sprite
-    //     });
-    //     // score add and repaint
-    //     if(ship.points == 40){
-    //         timer += 5000;
-    //     }
-    //     this.p1Score += ship.points;
-    //     this.scoreLeft.text = this.p1Score; 
-        
-    //     this.sound.play('sfx_explosion');
-    //     let test = Math.floor(Math.random() * 4) + 1;
-    //     let enemydeathsfx = 'sfx_enemydeath_' + test;
-    //     this.sound.play(enemydeathsfx);
-    //   }
+        this.yellowpanel.tilePositionX += 6;
+        this.redpanel.tilePositionX += 8;
+        this.purplepanel.tilePositionX += 9.5;
+        this.whiterays.tilePositionX += 20;
+        this.player.update();
     
-    //   bonusExplode(ship) {
-    //     // temporarily hide ship
-    //     ship.alpha = 0;                         
-    //     // create explosion sprite at ship's position
-    //     let boom = this.add.sprite(ship.x, ship.y, 'bonus_explosion').setOrigin(0, 0);
-    //     boom.anims.play('bonus_explode');             // play explode animation
-    //     boom.on('animationcomplete', () => {    // callback after anim completes
-    //         ship.reset();                         // reset ship position
-    //         ship.alpha = 1;                       // make ship visible again
-    //         boom.destroy();                       // remove explosion sprite
-    //     });
-    //     // score add and repaint
-    //     if(ship.points == 40){
-    //         timer += 5000;
-    //     }
-    //     this.p1Score += ship.points;
-    //     this.scoreLeft.text = this.p1Score;
+        // if(!this.gameOver) {
+        //     this.player.update(); // update p1
+        // }
 
-    //     this.sound.play('sfx_bonus');
-    //   }
-
+        // if(this.gameOver) {
+            
+        // }
     }
 }

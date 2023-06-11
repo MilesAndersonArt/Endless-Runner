@@ -19,6 +19,7 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
         // fire button
         if(Phaser.Input.KeyboardEvent.JustDown(keySPACE) && !this.isFiring) {
             this.isFiring = true;
+            this.sfxShoot.play();
         }
         // if fired, move right
         if(this.isFiring && this.x < game.config.width) {

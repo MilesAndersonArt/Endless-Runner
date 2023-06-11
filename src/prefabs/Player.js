@@ -3,35 +3,40 @@ class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
-        scene.add.existing(this);   // add to existing, displayList, updateList
+        scene.add.existing(this);
         scene.physics.add.existing(this); // assign sprite with a physics body
         // allows gravity
-        // this.body.allowGravity = true;
+        this.body.allowGravity = true;
+        this.body.setVelocity(0, 0);
     }
 
+    
+
     update() {
+        console.log('player update activated');
         // horizontal movement
         if (keyLEFT.isDown && this.x > 0) {
-            this.setVelocityX(-200);
+            this.body.setVelocityX(-300);
+            console.log('left');
         } else if (keyRIGHT.isDown && this.x < config.width) {
-            this.setVelocityX(200);
+            this.body.setVelocityX(300);
+            console.log('right');
         } else {
-            this.setVelocityX(0);
+            this.body.setVelocityX(0);
+            console.log('stagnant');
         }
         // vertical movement
-        if(keyUP.isDown && this.y < config.height) {
-            this.setVelocityY(100);
-        } else if (keyDOWN.isDown && this.y > 0) {
-            this.setVelocityY(400);
+        if(keyUP.isDown) {
+            this.body.setVelocityY(-270);
+            console.log('up');
+        } else if (keyDOWN.isDown && this.y < config.height) {
+            this.body.setVelocityY(300);
+            console.log('down');
         } else {
-            this.setVelocityY(0);
+            this.body.setVelocityY(0);
+            console.log('stagnant');
         }
         
     }
 
-    // reset rocket to "ground"
-    reset() {
-        this.isFiring = false;
-        this.y = game.config.height - borderUISize - borderPadding;
-    }
 }
