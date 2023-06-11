@@ -38,9 +38,10 @@ class Menu extends Phaser.Scene {
         // reset music loop
         this.game.sound.stopAll();
         // set up music loop
-        this.bgMusic = this.sound.add('bg_music');
-        this.bgMusic.setLoop(true);
-        this.bgMusic.play();
+          this.bgMusic = this.sound.add('bg_music');
+          this.bgMusic.setLoop(true);
+          this.bgMusic.play();
+
         
         // show menu text
         //this.title = this.add.sprite(game.config.width/2, game.config.height/2, 'Title');
