@@ -30,8 +30,8 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 840, 545, 'background').setOrigin(0, 0);
         this.whiterays = this.add.tileSprite(0, 0, 840, 545, 'whiterays').setOrigin(0, 0);
         this.purplepanel = this.add.tileSprite(0, 0, 840, 545, 'purplepanel').setOrigin(0, 0);
-        this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
         this.yellowpanel = this.add.tileSprite(0, 0, 840, 545, 'yellowpanel').setOrigin(0, 0);
+        this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
         // white UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0xffffff).setOrigin(0, 0);
         // // black borders
@@ -116,7 +116,7 @@ class Play extends Phaser.Scene {
         // add enemies
         
         // Intialize Random Monolith Generator variables
-        // credit:
+        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples:
         this.monoliths = this.physics.add.group();
         this.monolithInterval = 2000; // Time (in milliseconds) between pipe generation
         this.monolithTimer = this.time.addEvent({
@@ -125,7 +125,7 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
-
+        this.createMonolith();
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -155,8 +155,8 @@ class Play extends Phaser.Scene {
         // this.gameOver = false;
 
     }
-    // Monolith generator group
-    // credit: 
+    // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples:
+    // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
     createMonolith() {
         var monolithVerticalDistance = Phaser.Math.Between(135, 365); // Distance between the monoliths vertically
         var monolithHorizontalDistance = 150; // Distance between the monoliths horizontally
@@ -167,11 +167,13 @@ class Play extends Phaser.Scene {
         monolithTop.setOrigin(0, 1); // Set origin to the bottom left
         monolithTop.body.velocity.x = -200; // set the horizontal velocity
         monolithTop.body.allowGravity = false; // Disable gravity
+        monolithTop.anims.play('topmonolith_atlas'); // Start playing the 'topmonolith_atlas' animation
 
         var monolithBottom = this.physics.add.sprite(this.game.config.width, monolithTopHeight + monolithVerticalDistance, 'bottommonolith_atlas');
         monolithBottom.setOrigin(0, 0); // Set origin to the bottom left
         monolithBottom.body.velocity.x = -200; // set the horizontal velocity
         monolithBottom.body.allowGravity = false; // Disable gravity
+        monolithBottom.anims.play('bottommonolith_atlas'); // Start playing the 'bottommonolith_atlas' animation
 
         // Add monoliths to the group
         this.monoliths.add(monolithTop);
@@ -185,8 +187,10 @@ class Play extends Phaser.Scene {
         this.purplepanel.tilePositionX += 9.5;
         this.whiterays.tilePositionX += 20;
         this.player.update();
-    
+        s
         // Update monolith positions
+        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples:
+        // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
         this.monoliths.getChildren().forEach(function (monolith) {
             if (monolith.getBounds().right < 0) {
             // If the pipe has moved off the screen, destroy it
