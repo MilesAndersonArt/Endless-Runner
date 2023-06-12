@@ -116,7 +116,8 @@ class Play extends Phaser.Scene {
         // add enemies
         
         // Intialize Random Monolith Generator variables
-        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples:
+        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
+        // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
         this.monoliths = this.physics.add.group();
         this.monolithInterval = 2000; // Time (in milliseconds) between pipe generation
         this.monolithTimer = this.time.addEvent({
@@ -126,6 +127,7 @@ class Play extends Phaser.Scene {
             loop: true
         });
         this.createMonolith();
+
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -155,7 +157,7 @@ class Play extends Phaser.Scene {
         // this.gameOver = false;
 
     }
-    // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples:
+    // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
     // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
     createMonolith() {
         var monolithVerticalDistance = Phaser.Math.Between(135, 365); // Distance between the monoliths vertically
@@ -189,7 +191,7 @@ class Play extends Phaser.Scene {
         this.player.update();
         s
         // Update monolith positions
-        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples:
+        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
         // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
         this.monoliths.getChildren().forEach(function (monolith) {
             if (monolith.getBounds().right < 0) {
