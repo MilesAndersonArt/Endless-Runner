@@ -20,9 +20,9 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('enemydeath', './assets/anim/png/EnemyDeath_Anim.png', {frameWidth: 51, frameHeight: 51, startFrame: 0, endFrame: 7});
 
         // load texture atlas
-        this.load.atlas('enemyidle_atlas', './assets/anim/png/diamondenemyidle.png', 'assets/anim/json/enemyidle.json');
-        this.load.atlas('bottommonolith_atlas', './assets/anim/png/BottomMonolith_Anim.png', 'assets/anim/json/BottomMonolith.json');
-        this.load.atlas('topmonolith_atlas', './assets/anim/png/TopMonolith_Anim.png', 'assets/anim/json/TopMonolith.json');
+        this.load.atlas('enemyidle_atlas', './assets/anim/png/diamondenemyidle.png', './assets/anim/json/enemyidle.json');
+        this.load.atlas('bottommonolith_atlas', './assets/anim/png/BottomMonolith_Anim.png', './assets/anim/json/BottomMonolith.json');
+        this.load.atlas('topmonolith_atlas', './assets/anim/png/TopMonolith_Anim.png', './assets/anim/json/TopMonolith.json');
     }
 
     create() {
@@ -85,31 +85,31 @@ class Play extends Phaser.Scene {
             frames: this.anims.generateFrameNames('enemyidle_atlas', {
                 prefix: 'enemy_',
                 start: 1,
-                end: 4,
+                end: 4
             }),
             frameRate: 2,
             repeat: -1
         })
         // bottom monolith atlas
         this.anims.create({
-            key: 'bottommonolith_atlas',
+            key: 'bottommonolith_atlas_anim',
             frames: this.anims.generateFrameNames('bottommonolith_atlas', {
                 prefix: 'BottomMonolith_',
                 start: 1,
-                end: 4,
+                end: 4
             }),
-            frameRate: 4,
+            frameRate: 6,
             repeat: -1
         })
         // top monolith atlas
         this.anims.create({
-            key: 'topmonolith_atlas',
+            key: 'topmonolith_atlas_anim',
             frames: this.anims.generateFrameNames('topmonolith_atlas', {
                 prefix: 'TopMonolith_',
                 start: 1,
-                end: 4,
+                end: 4
             }),
-            frameRate: 4,
+            frameRate: 6,
             repeat: -1
         })
 
@@ -119,14 +119,17 @@ class Play extends Phaser.Scene {
         // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
         // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
         this.monoliths = this.physics.add.group();
-        this.monolithInterval = 2000; // Time (in milliseconds) between pipe generation
         this.monolithTimer = this.time.addEvent({
-            delay:  this.monolithInterval,
+            delay:  2000, // Time (in milliseconds) between pipe generation
             callback: this.createMonolith,
             callbackScope: this,
             loop: true
         });
         this.createMonolith();
+
+        // COLLISION DETECTION
+        // Set up collision detection
+        this.physics.add.collider(this.player, this.monoliths, this.gameOver, null, this);
 
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
@@ -136,6 +139,7 @@ class Play extends Phaser.Scene {
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         // console.log('keys initialized');
+
 
         // initialize score
         // this.p1Score = 0;
@@ -160,26 +164,32 @@ class Play extends Phaser.Scene {
     // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
     // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
     createMonolith() {
-        var monolithVerticalDistance = Phaser.Math.Between(135, 365); // Distance between the monoliths vertically
-        var monolithHorizontalDistance = 150; // Distance between the monoliths horizontally
-        var monolithTopHeight = Phaser.Math.Between(50, 250); // Height of the top monolith
+        const monolithVerticalDistance = Phaser.Math.Between(135, 365); // Distance between the monoliths vertically
+        const monolithHorizontalDistance = game.config.width + 100; // Distance between the monoliths horizontally
+        const monolithTopHeight = Phaser.Math.Between(0, game.config.height - monolithVerticalDistance); // Height of the top monolith
 
         // set up Top Monolith
-        var monolithTop = this.physics.add.sprite(this.game.config.width, monolithTopHeight, 'topmonolith_atlas');
+        const monolithTop = this.monoliths.create(monolithHorizontalDistance, monolithTopHeight, 'topmonolith_atlas');
         monolithTop.setOrigin(0, 1); // Set origin to the bottom left
-        monolithTop.body.velocity.x = -200; // set the horizontal velocity
+        monolithTop.body.velocity.x = -300; // set the horizontal velocity
         monolithTop.body.allowGravity = false; // Disable gravity
-        monolithTop.anims.play('topmonolith_atlas'); // Start playing the 'topmonolith_atlas' animation
 
-        var monolithBottom = this.physics.add.sprite(this.game.config.width, monolithTopHeight + monolithVerticalDistance, 'bottommonolith_atlas');
+        const monolithBottom = this.physics.add.sprite(monolithHorizontalDistance, monolithTopHeight + monolithVerticalDistance, 'bottommonolith_atlas');
         monolithBottom.setOrigin(0, 0); // Set origin to the bottom left
-        monolithBottom.body.velocity.x = -200; // set the horizontal velocity
+        monolithBottom.body.velocity.x = -300; // set the horizontal velocity
         monolithBottom.body.allowGravity = false; // Disable gravity
-        monolithBottom.anims.play('bottommonolith_atlas'); // Start playing the 'bottommonolith_atlas' animation
 
-        // Add monoliths to the group
-        this.monoliths.add(monolithTop);
-        this.monoliths.add(monolithBottom);
+        // // Start playing the monolith atlas animations
+        monolithTop.anims.play('topmonolith_atlas_anim');
+        // console.log('background: ' + this.background.depth);
+        // console.log('top: ' + monolithTop.depth);
+        monolithBottom.anims.play('bottommonolith_atlas_anim');
+        // console.log('background: ' + this.background.depth);
+        // console.log('bottom: ' + monolithBottom.depth);
+
+        // // Add monoliths to the group
+        // this.monoliths.add(monolithTop);
+        // this.monoliths.add(monolithBottom);
 
     }
     update() {
@@ -188,8 +198,9 @@ class Play extends Phaser.Scene {
         this.redpanel.tilePositionX += 12;
         this.purplepanel.tilePositionX += 9.5;
         this.whiterays.tilePositionX += 20;
-        this.player.update();
-        s
+     
+ 
+        
         // Update monolith positions
         // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
         // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
@@ -200,12 +211,12 @@ class Play extends Phaser.Scene {
             }
         });
           
-        // if(!this.gameOver) {
-        //     this.player.update(); // update p1
-        // }
+        if(!this.gameOver) {
+            this.player.update(); // update p1
+        }
 
-        // if(this.gameOver) {
+        if(this.gameOver) {
             
-        // }
+        }
     }
 }
