@@ -44,6 +44,7 @@ class Play extends Phaser.Scene {
 
         // add Player
         this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
+        this.player.body.setSize(65, 59, 32.5, 29.5);
 
         // ANIMATION CONFIG
         // laser shooting animation
@@ -112,13 +113,14 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         })
+        this.enemies.defaults = {}; //Prevents group from chainging properties (such as gravity) of added objects
 
         // Physics group for lasers
         this.lasers = this.physics.add.group({
             classType: Laser,
             runChildUpdate: true
         });
-        this.lasers.defaults = {};
+        this.lasers.defaults = {}; //Prevents group from chainging properties (such as gravity) of added objects
 
         // Intialize Random Monolith Generator variables
         // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
@@ -130,13 +132,15 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+        this.monoliths.defaults = {};
         this.createMonolith();
 
         // COLLISION DETECTION
         // Laser-Enemy Collision
         this.physics.add.collider(this.lasers, this.enemies, this.LaserEnemyCollision, null, this);
-        // Player-Monolith Collision
-        this.physics.add.collider(this.player, this.monoliths, this.gameOver, null, this);
+        // Player-Death Collision
+        this.physics.add.collider(this.player, this.monoliths, this.PlayerDeathCollision, null, this);
+        this.physics.add.collider(this.player, this.enemies, this.PlayerDeathCollision, null, this);
 
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
@@ -165,7 +169,7 @@ class Play extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);        
         // GAME OVER flag
-        // this.gameOver = false;
+        this.gameOver = false;
 
     }
     // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
@@ -175,16 +179,25 @@ class Play extends Phaser.Scene {
         const monolithHorizontalDistance = game.config.width + 100; // Distance between the monoliths horizontally
         const monolithTopHeight = Phaser.Math.Between(0, game.config.height - monolithVerticalDistance); // Height of the top monolith
 
+        this.monoliths.getChildren().forEach(function (monolith) {
+            this.physics.add.existing(monolith);
+            monolith.body.immovable = true; // sets immovable
+            }, this)
+
         // set up Top Monolith
         const monolithTop = this.monoliths.create(monolithHorizontalDistance, monolithTopHeight, 'topmonolith_atlas');
         monolithTop.setOrigin(0, 1); // Set origin to the bottom left
         monolithTop.body.velocity.x = -300; // set the horizontal velocity
         monolithTop.body.allowGravity = false; // Disable gravity
+        monolithTop.body.setSize(monolithTop.width,  monolithTop.height, true); // Set the physics body size
+        monolithTop.body.immovable = true; // sets immovable
 
         const monolithBottom = this.physics.add.sprite(monolithHorizontalDistance, monolithTopHeight + monolithVerticalDistance, 'bottommonolith_atlas');
         monolithBottom.setOrigin(0, 0); // Set origin to the bottom left
         monolithBottom.body.velocity.x = -300; // set the horizontal velocity
         monolithBottom.body.allowGravity = false; // Disable gravity
+        monolithBottom.body.setSize(monolithBottom.width, monolithBottom.height, true); // Set the physics body size
+        monolithBottom.body.immovable = true; // sets immovable
 
         // Start playing the monolith atlas animations
         monolithTop.anims.play('topmonolith_atlas_anim');
@@ -243,7 +256,7 @@ class Play extends Phaser.Scene {
             });
         }
         if(this.gameOver) {
-            this.player.setVelocityX(0); // Stop the player's movement (temporary)
+            // this.player.setVelocityX(0); // Stop the player's movement (temporary)
             // Pause enemies upon game over
             this.enemySpawnTimer.paused = true;
             this.enemies.getChildren().forEach(function (enemy) {
@@ -253,6 +266,42 @@ class Play extends Phaser.Scene {
         }
     }
 
+    PlayerDeathCollision(player, obstacle){
+        if (this.gameOver) {
+            return;
+        }
+        this.gameOver = true; // ensures that animation and sound don't repeat more than once
+
+        // Stop the player's movement
+        this.player.setVelocityX(0);
+
+        // Play death animation for the player
+        this.player.alpha = 0;
+
+        let die = this.add.sprite(this.player.x, this.player.y, 'playerdeath_anim').setOrigin(0,0);
+        die.anims.play('playerdeath_anim');    // play death animation
+        
+        // Hide the player sprite after the death animation completes
+        die.on('animationcomplete', () => {
+            die.destroy();
+            this.player.destroy(); // Removes player character from scene
+        }, this);
+
+        this.sound.play('sfx_death');
+
+    }
+
+    LaserEnemyCollision(laser, enemy) {
+        // Disable the laser and enemy upon collision
+        laser.reset();
+        enemy.reset();
+        // Destroy the enemy and play the death animation
+        enemy.destroy();
+        // Increase the player's score
+        this.p1Score += enemy.points;
+        // Update the score display
+        this.scoreLeft.text = this.p1Score;
+    }
     shootLaser() {
         // Get player position
         const playerX = this.player.x + this.player.width;

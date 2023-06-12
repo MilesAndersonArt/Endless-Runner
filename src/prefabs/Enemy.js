@@ -4,8 +4,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this); // add to existing scene
         scene.physics.add.existing(this); // assign sprite with a physics body
-        // removes gravity
-        this.body.allowGravity = false;
+        this.body.allowGravity = false; // removes gravity
+        this.body.setSize(this.width,  this.height, true); // Set the physics body size
         this.points = pointValue;
 
         // may need to fix movespeed
