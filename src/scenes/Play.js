@@ -44,7 +44,7 @@ class Play extends Phaser.Scene {
 
         // add Player
         this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
-        this.player.body.setSize(65, 59, 32.5, 29.5);
+        this.player.body.setSize(65, 59);
 
         // ANIMATION CONFIG
         // laser shooting animation
@@ -121,6 +121,9 @@ class Play extends Phaser.Scene {
             runChildUpdate: true
         });
         this.lasers.defaults = {}; //Prevents group from chainging properties (such as gravity) of added objects
+        // Create a new laser instance
+        const laser = new Laser(this, 0, 0, 'laser');
+
 
         // Intialize Random Monolith Generator variables
         // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
@@ -136,11 +139,12 @@ class Play extends Phaser.Scene {
         this.createMonolith();
 
         // COLLISION DETECTION
-        // Laser-Enemy Collision
-        this.physics.add.collider(this.lasers, this.enemies, this.LaserEnemyCollision, null, this);
         // Player-Death Collision
         this.physics.add.collider(this.player, this.monoliths, this.PlayerDeathCollision, null, this);
-        this.physics.add.collider(this.player, this.enemies, this.PlayerDeathCollision, null, this);
+        this.physics.add.collider(this.monoliths, this.player, this.PlayerDeathCollision, null, this);
+        this.physics.add.overlap(this.player, this.enemies, this.PlayerDeathCollision, null, this);
+        // Laser-Enemy Collision
+        this.physics.add.collider(this.lasers, this.enemies, this.LaserEnemyCollision, null, this);
 
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
@@ -191,6 +195,7 @@ class Play extends Phaser.Scene {
         monolithTop.body.allowGravity = false; // Disable gravity
         monolithTop.body.setSize(monolithTop.width,  monolithTop.height, true); // Set the physics body size
         monolithTop.body.immovable = true; // sets immovable
+    
 
         const monolithBottom = this.physics.add.sprite(monolithHorizontalDistance, monolithTopHeight + monolithVerticalDistance, 'bottommonolith_atlas');
         monolithBottom.setOrigin(0, 0); // Set origin to the bottom left
@@ -203,6 +208,14 @@ class Play extends Phaser.Scene {
         monolithTop.anims.play('topmonolith_atlas_anim');
         monolithBottom.anims.play('bottommonolith_atlas_anim');
 
+        // Collision logic between player and individual monoliths
+        this.physics.add.collider(this.player, monolithTop, () => {
+            this.PlayerDeathCollision(this.player, monolithTop);
+        });
+        this.physics.add.collider(this.player, monolithBottom, () => {
+            this.PlayerDeathCollision(this.player, monolithBottom);
+        });
+
     }
 
     spawnEnemy() {
@@ -212,10 +225,12 @@ class Play extends Phaser.Scene {
             const randomY = Phaser.Math.Between(50, game.config.height - 20);
             const enemy = new Enemy(this, game.config.width, randomY, 'enemyidle_atlas');
             enemy.setOrigin(0.5);
+            enemy.setVelocityX(Phaser.Math.Between(-600, -200)); // random velocity between -200 and -600
 
-            const randomXVelocity = Phaser.Math.Between(-600, -200); // random velocity between -200 and -600
-            enemy.body.velocity.x = randomXVelocity;
+            // Collision detection between player and enemy
+            this.physics.add.collider(this.player, enemy, this.PlayerDeathCollision, null, this);
         }
+        
     }
 
     update() {
@@ -291,6 +306,18 @@ class Play extends Phaser.Scene {
 
     }
 
+    shootLaser() {
+        // Get player position
+        const playerX = this.player.x + this.player.width;
+        const playerY = this.player.y + this.player.height / 2;
+        // Create a new laser
+        const laser = new Laser(this, playerX, playerY);
+        laser.shoot(playerX, playerY);
+        
+        // Add the laser to a group
+        this.lasers.add(laser);
+    }
+    
     LaserEnemyCollision(laser, enemy) {
         // Disable the laser and enemy upon collision
         laser.reset();
@@ -302,15 +329,5 @@ class Play extends Phaser.Scene {
         // Update the score display
         this.scoreLeft.text = this.p1Score;
     }
-    shootLaser() {
-        // Get player position
-        const playerX = this.player.x + this.player.width;
-        const playerY = this.player.y + this.player.height / 2;
-        // Get the first available laser from the group
-        const laser = this.lasers.get();
-        if (laser) {
-            // Position the laser at the player's location
-            laser.shoot(playerX, playerY);
-        }
-    }
+
 }

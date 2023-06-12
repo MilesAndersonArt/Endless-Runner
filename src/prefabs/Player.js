@@ -8,6 +8,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // allows gravity
         this.body.allowGravity = false;
         this.body.setVelocity(0, 0);
+        this.body.immovable = false;
     }
 
     
