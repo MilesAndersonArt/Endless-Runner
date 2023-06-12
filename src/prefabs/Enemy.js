@@ -29,13 +29,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     update() {
         // move left
         this.x -= this.movespeed;
-        // wrap around from right edge to left edge
+        // check if enemy has moved off the left edge of the screen
         if(this.x <= 0 - this.width) {
-            this.x = game.config.width;
+            this.destroy();
         }
     }
-    // position reset
-    reset () {
-        this.x = game.config.width;
-    }
+
 }
