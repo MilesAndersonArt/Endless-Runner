@@ -71,7 +71,7 @@ class Play extends Phaser.Scene {
             key: 'enemydeath',
             frames: this.anims.generateFrameNumbers('enemydeath', { 
                 start: 0, 
-                end: 7, 
+                end: 5, 
                 first: 0
                 
             }),
@@ -115,7 +115,16 @@ class Play extends Phaser.Scene {
 
         // add enemies
         
-        // Initialize Monolith variables
+        // Intialize Random Monolith Generator variables
+        // credit:
+        this.monoliths = this.physics.add.group();
+        this.monolithInterval = 2000; // Time (in milliseconds) between pipe generation
+        this.monolithTimer = this.time.addEvent({
+            delay:  this.monolithInterval,
+            callback: this.createMonolith,
+            callbackScope: this,
+            loop: true
+        });
 
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
@@ -146,7 +155,29 @@ class Play extends Phaser.Scene {
         // this.gameOver = false;
 
     }
+    // Monolith generator group
+    // credit: 
+    createMonolith() {
+        var monolithVerticalDistance = Phaser.Math.Between(135, 365); // Distance between the monoliths vertically
+        var monolithHorizontalDistance = 150; // Distance between the monoliths horizontally
+        var monolithTopHeight = Phaser.Math.Between(50, 250); // Height of the top monolith
 
+        // set up Top Monolith
+        var monolithTop = this.physics.add.sprite(this.game.config.width, monolithTopHeight, 'topmonolith_atlas');
+        monolithTop.setOrigin(0, 1); // Set origin to the bottom left
+        monolithTop.body.velocity.x = -200; // set the horizontal velocity
+        monolithTop.body.allowGravity = false; // Disable gravity
+
+        var monolithBottom = this.physics.add.sprite(this.game.config.width, monolithTopHeight + monolithVerticalDistance, 'bottommonolith_atlas');
+        monolithBottom.setOrigin(0, 0); // Set origin to the bottom left
+        monolithBottom.body.velocity.x = -200; // set the horizontal velocity
+        monolithBottom.body.allowGravity = false; // Disable gravity
+
+        // Add monoliths to the group
+        this.monoliths.add(monolithTop);
+        this.monoliths.add(monolithBottom);
+
+    }
     update() {
         // BG parallax scrolling
         this.yellowpanel.tilePositionX += 18;
@@ -155,6 +186,14 @@ class Play extends Phaser.Scene {
         this.whiterays.tilePositionX += 20;
         this.player.update();
     
+        // Update monolith positions
+        this.monoliths.getChildren().forEach(function (monolith) {
+            if (monolith.getBounds().right < 0) {
+            // If the pipe has moved off the screen, destroy it
+            monolith.destroy();
+            }
+        });
+          
         // if(!this.gameOver) {
         //     this.player.update(); // update p1
         // }
