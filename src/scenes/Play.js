@@ -44,7 +44,6 @@ class Play extends Phaser.Scene {
 
         // add Player
         this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
-        this.laser = new Laser(this, 0, 0, 'laser');
 
         // ANIMATION CONFIG
         // laser shooting animation
@@ -114,6 +113,13 @@ class Play extends Phaser.Scene {
             loop: true
         })
 
+        // Physics group for lasers
+        this.lasers = this.physics.add.group({
+            classType: Laser,
+            runChildUpdate: true
+        });
+        this.lasers.defaults = {};
+
         // Intialize Random Monolith Generator variables
         // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
         // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
@@ -127,7 +133,9 @@ class Play extends Phaser.Scene {
         this.createMonolith();
 
         // COLLISION DETECTION
-        // Set up collision detection
+        // Laser-Enemy Collision
+        this.physics.add.collider(this.lasers, this.enemies, this.LaserEnemyCollision, null, this);
+        // Player-Monolith Collision
         this.physics.add.collider(this.player, this.monoliths, this.gameOver, null, this);
 
         // SET UP KEYBOARD INPUT
@@ -206,6 +214,17 @@ class Play extends Phaser.Scene {
 
         if(!this.gameOver) {
             this.player.update(); // update p1
+            // Fire laser
+            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                this.shootLaser();
+            }
+            this.lasers.getChildren().forEach((laser) => {
+                if (laser.active) {
+                  if (laser.x > game.config.width) {
+                    laser.reset();
+                  }
+                }
+              });
 
             // Update monolith positions
             // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
@@ -231,6 +250,18 @@ class Play extends Phaser.Scene {
                 enemy.setVelocityX(0);
             });
 
+        }
+    }
+
+    shootLaser() {
+        // Get player position
+        const playerX = this.player.x + this.player.width;
+        const playerY = this.player.y + this.player.height / 2;
+        // Get the first available laser from the group
+        const laser = this.lasers.get();
+        if (laser) {
+            // Position the laser at the player's location
+            laser.shoot(playerX, playerY);
         }
     }
 }

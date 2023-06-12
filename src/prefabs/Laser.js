@@ -1,6 +1,6 @@
 class Laser extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
-        super(scene, x, y, texture, frame);
+        super(scene, x, y, 'laser');
 
         scene.add.existing(this); // add to existing scene
         scene.physics.add.existing(this); // assign sprite with a physics body
@@ -12,32 +12,40 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
         this.isFiring = false; // track firing status
         this.sfxShoot = scene.sound.add('sfx_shoot') // add laser shoot sfx
 
+        // Add firing animation to the player
+        // this.shootanim = scene.add.sprite(x, y, 'shoot');
+        // this.shootanim.setVisible(false);
+        // this.shootanim.on('animationcomplete', () => {
+        //     this.shootanim.setVisible(false);
+        // })
+
+    }
+    
+    shoot(x, y) {
+        // Set the laser's initial position and properties
+        this.setPosition(x, y);
+        this.setActive(true);
+        this.setVisible(true);
+        this.isFiring = true;
+
+        this.body.setVelocityX(750);
+        // this.shootanim.setPosition(x, y);
+        // this.shootanim.setVisible(true);
+        // this.shootanim.play('shoot_anim');
+        this.sfxShoot.play();
+
     }
 
     update() {
-        // fire button
-        if(Phaser.Input.KeyboardEvent.JustDown(keySPACE) && !this.isFiring) {
-            this.isFiring = true;
-            this.x = this.player.x
-            this.y = this.player.y
-            this.setActive(true);
-            this.setVisible(true);
-            this.sfxShoot.play();
-        }
-        // if fired, move right
-        if(this.isFiring && this.x < game.config.width) {
-            this.body.setVelocityX(750);
-        }
-        if(this.x >= game.config.width){
+        if(this.isFiring && this.x > game.config.width) {
             this.reset();
         }
-
     }
     // position reset
-    reset () {
+    reset() {
         this.isFiring = false;
         this.setActive(false);
         this.setVisible(false);
-        this.x = game.config.width;
+        this.setPosition(game.config.width, this.y);
     }
 }
