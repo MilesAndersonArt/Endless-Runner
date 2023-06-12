@@ -10,14 +10,14 @@ class Menu extends Phaser.Scene {
         this.load.audio('bg_music', './assets/sound/8BitRaceway.mp3');
 
         //load sfx
-        this.load.audio('sfx_explosion1', './assets/sound/explosion_1.wav');
-        this.load.audio('sfx_explosion2', './assets/sound/explosion_2.wav');
-        this.load.audio('sfx_explosion3', './assets/sound/explosion_3.wav');
-        this.load.audio('sfx_explosion4', './assets/sound/explosion_4.wav');
-        this.load.audio('sfx_explosion5', './assets/sound/explosion_5.wav');
+        this.load.audio('sfx_explosion_1', './assets/sound/explosion_1.mp3');
+        this.load.audio('sfx_explosion_2', './assets/sound/explosion_2.mp3');
+        this.load.audio('sfx_explosion_3', './assets/sound/explosion_3.mp3');
+        this.load.audio('sfx_explosion_4', './assets/sound/explosion_4.mp3');
+        this.load.audio('sfx_explosion_5', './assets/sound/explosion_5.mp3');
 
-        this.load.audio('sfx_death', './assets/sound/explosion_death.wav');
-        this.load.audio('sfx_shoot', './assets/sound/laserShoot.wav');
+        this.load.audio('sfx_death', './assets/sound/explosion_death.mp3');
+        this.load.audio('sfx_shoot', './assets/sound/laserShoot.mp3');
 
     }
 
