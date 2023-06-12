@@ -13,10 +13,10 @@ class Player extends Phaser.GameObjects.Sprite {
     
 
     update() {
-        console.log('player update activated');
+        // console.log('player update activated');
         // horizontal movement
         if (keyLEFT.isDown && this.x > 0) {
-            this.body.setVelocityX(-300);
+            this.body.setVelocityX(-400);
             // console.log('left');
         } else if (keyRIGHT.isDown && this.x < config.width) {
             this.body.setVelocityX(300);
