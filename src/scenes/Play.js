@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
     preload() {
         // load player sprite
         this.load.image('player', './assets/player/Pod.png');
+        this.load.image('laser', './assets/player/laser.png');
 
         // scrolling tile sprites / parallax
         this.load.image('background', './assets/bg/background.png');
@@ -43,11 +44,12 @@ class Play extends Phaser.Scene {
 
         // add Player
         this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
+        this.laser = new Laser(this, 0, 0, 'laser');
 
         // ANIMATION CONFIG
         // laser shooting animation
         this.anims.create({
-            key: 'shoot',
+            key: 'shoot_anim',
             frames: this.anims.generateFrameNumbers('shoot', { 
                 start: 0, 
                 end: 4, 
@@ -58,7 +60,7 @@ class Play extends Phaser.Scene {
         });
         // player death animation
         this.anims.create({
-            key: 'playerdeath',
+            key: 'playerdeath_anim',
             frames: this.anims.generateFrameNumbers('playerdeath', { 
                 start: 0, 
                 end: 5, 
@@ -69,7 +71,7 @@ class Play extends Phaser.Scene {
         });
         // enemy death animation
         this.anims.create({
-            key: 'enemydeath',
+            key: 'enemydeath_anim',
             frames: this.anims.generateFrameNumbers('enemydeath', { 
                 start: 0, 
                 end: 5, 
@@ -204,7 +206,7 @@ class Play extends Phaser.Scene {
 
         if(!this.gameOver) {
             this.player.update(); // update p1
-            
+
             // Update monolith positions
             // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
             // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
@@ -221,9 +223,14 @@ class Play extends Phaser.Scene {
                 }
             });
         }
-
         if(this.gameOver) {
-            
+            this.player.setVelocityX(0); // Stop the player's movement (temporary)
+            // Pause enemies upon game over
+            this.enemySpawnTimer.paused = true;
+            this.enemies.getChildren().forEach(function (enemy) {
+                enemy.setVelocityX(0);
+            });
+
         }
     }
 }
