@@ -78,7 +78,7 @@ class Play extends Phaser.Scene {
                 first: 0
                 
             }),
-            frameRate: 30
+            frameRate: 12
         });
 
         // TEXTURE ATLAS ANIMS
@@ -142,7 +142,7 @@ class Play extends Phaser.Scene {
         // Player-Death Collision
         this.physics.add.collider(this.player, this.monoliths, this.PlayerDeathCollision, null, this);
         this.physics.add.collider(this.monoliths, this.player, this.PlayerDeathCollision, null, this);
-        this.physics.add.overlap(this.player, this.enemies, this.PlayerDeathCollision, null, this);
+        this.physics.add.collider(this.player, this.enemies, this.PlayerDeathCollision, null, this);
         // Laser-Enemy Collision
         this.physics.add.collider(this.lasers, this.enemies, this.LaserEnemyCollision, null, this);
 
@@ -229,6 +229,9 @@ class Play extends Phaser.Scene {
 
             // Collision detection between player and enemy
             this.physics.add.collider(this.player, enemy, this.PlayerDeathCollision, null, this);
+
+            // Create a collider between the lasers and enemies
+            this.physics.add.collider(this.lasers, enemy, this.LaserEnemyCollision, null, this);
         }
         
     }
@@ -281,6 +284,22 @@ class Play extends Phaser.Scene {
         }
     }
 
+    shootLaser() {
+        // Get player position
+        const playerX = this.player.x + this.player.width;
+        const playerY = this.player.y + this.player.height / 2;
+        // Create a new laser
+        const laser = new Laser(this, playerX, playerY);
+        laser.shoot(playerX, playerY);
+        //laser.body.collideWorldBounds = true;
+        
+        // Add the laser to a group
+        this.lasers.add(laser);
+
+        // Collision detection between the lasers and enemies
+       this.physics.add.collider(laser, this.enemies, this.LaserEnemyCollision, null, this);
+    }
+
     PlayerDeathCollision(player, obstacle){
         if (this.gameOver) {
             return;
@@ -306,28 +325,30 @@ class Play extends Phaser.Scene {
 
     }
 
-    shootLaser() {
-        // Get player position
-        const playerX = this.player.x + this.player.width;
-        const playerY = this.player.y + this.player.height / 2;
-        // Create a new laser
-        const laser = new Laser(this, playerX, playerY);
-        laser.shoot(playerX, playerY);
-        
-        // Add the laser to a group
-        this.lasers.add(laser);
-    }
-    
     LaserEnemyCollision(laser, enemy) {
+
         // Disable the laser and enemy upon collision
-        laser.reset();
-        enemy.reset();
+        laser.disableBody(true, true);
+        enemy.disableBody(true, true);
+
         // Destroy the enemy and play the death animation
-        enemy.destroy();
+        let enemydeath = this.add.sprite(enemy.x, enemy.y, 'enemydeath_anim').setOrigin(0,0);
+        enemydeath.anims.play('enemydeath_anim');
+        // play death animation
+        enemydeath.on('animationcomplete', () => {
+            enemydeath.destroy();
+            enemy.destroy(); // removes enemy from scene
+        }, this);
+
         // Increase the player's score
         this.p1Score += enemy.points;
         // Update the score display
         this.scoreLeft.text = this.p1Score;
+
+        // sfx
+        let test = Math.floor(Math.random() * 4) + 1;
+        let enemydeathsfx = 'sfx_explosion_' + test;
+        this.sound.play(enemydeathsfx);
     }
 
 }
