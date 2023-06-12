@@ -13,6 +13,7 @@ class Play extends Phaser.Scene {
         this.load.image('purplepanel', './assets/bg/purplepanel.png');
         this.load.image('redpanel', './assets/bg/redpanel.png');
         this.load.image('yellowpanel', './assets/bg/yellowpanel.png');
+        this.load.image('ground', './assets/bg/ground.png');
 
         // load spritesheet
         this.load.spritesheet('shoot', './assets/anim/png/PodShoot_Anim.png', {frameWidth: 65, frameHeight: 65, startFrame: 0, endFrame: 4});
@@ -79,17 +80,6 @@ class Play extends Phaser.Scene {
         });
 
         // TEXTURE ATLAS ANIMS
-        // enemy idle atlas
-        this.anims.create({
-            key: 'enemyidle_atlas',
-            frames: this.anims.generateFrameNames('enemyidle_atlas', {
-                prefix: 'enemy_',
-                start: 1,
-                end: 4
-            }),
-            frameRate: 2,
-            repeat: -1
-        })
         // bottom monolith atlas
         this.anims.create({
             key: 'bottommonolith_atlas_anim',
@@ -114,7 +104,14 @@ class Play extends Phaser.Scene {
         })
 
         // add enemies
-        
+        this.enemies = this.physics.add.group();
+        this.enemySpawnTimer = this.time.addEvent({
+            delay: Phaser.Math.Between(2000, 5000), // Set the delay between enemy spawns (in milliseconds)
+            callback: this.spawnEnemy,
+            callbackScope: this,
+            loop: true
+        })
+
         // Intialize Random Monolith Generator variables
         // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
         // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
@@ -179,40 +176,50 @@ class Play extends Phaser.Scene {
         monolithBottom.body.velocity.x = -300; // set the horizontal velocity
         monolithBottom.body.allowGravity = false; // Disable gravity
 
-        // // Start playing the monolith atlas animations
+        // Start playing the monolith atlas animations
         monolithTop.anims.play('topmonolith_atlas_anim');
-        // console.log('background: ' + this.background.depth);
-        // console.log('top: ' + monolithTop.depth);
         monolithBottom.anims.play('bottommonolith_atlas_anim');
-        // console.log('background: ' + this.background.depth);
-        // console.log('bottom: ' + monolithBottom.depth);
-
-        // // Add monoliths to the group
-        // this.monoliths.add(monolithTop);
-        // this.monoliths.add(monolithBottom);
 
     }
+
+    spawnEnemy() {
+        const numEnemies = Phaser.Math.Between(1, 3);
+
+        for (let i = 0; i < numEnemies; i++) {
+            const randomY = Phaser.Math.Between(50, game.config.height - 20);
+            const enemy = new Enemy(this, game.config.width, randomY, 'enemyidle_atlas');
+            enemy.setOrigin(0.5);
+
+            const randomXVelocity = Phaser.Math.Between(-600, -200); // random velocity between -200 and -600
+            enemy.body.velocity.x = randomXVelocity;
+        }
+    }
+
     update() {
         // BG parallax scrolling
         this.yellowpanel.tilePositionX += 18;
         this.redpanel.tilePositionX += 12;
         this.purplepanel.tilePositionX += 9.5;
         this.whiterays.tilePositionX += 20;
-     
- 
-        
-        // Update monolith positions
-        // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
-        // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
-        this.monoliths.getChildren().forEach(function (monolith) {
-            if (monolith.getBounds().right < 0) {
-            // If the pipe has moved off the screen, destroy it
-            monolith.destroy();
-            }
-        });
-          
+
         if(!this.gameOver) {
             this.player.update(); // update p1
+            
+            // Update monolith positions
+            // Created random 'monolith' generator based off Thomas Palef's “How to Make Flappy Bird in Javascript with Phaser” and various Phaser 3 examples
+            // credit: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
+            this.monoliths.getChildren().forEach(function (monolith) {
+                if (monolith.getBounds().right < 0) {
+                // If the pipe has moved off the screen, destroy it
+                monolith.destroy();
+                }
+            });
+            // Update enemies to their DOOM
+            this.enemies.getChildren().forEach(function (enemy) {
+                if (enemy.getBounds().right < 0) {
+                    enemy.destroy(); // If the enemy has moved off the screen, destroy it
+                }
+            });
         }
 
         if(this.gameOver) {

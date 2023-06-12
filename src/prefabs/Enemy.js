@@ -13,16 +13,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         //add sprite animation
         this.anims.create({
-            key: 'enemyidle',
+            key: 'enemyidle_atlas_anim',
             frames: this.anims.generateFrameNames('enemyidle_atlas', {
                 prefix: 'enemy_',
                 start: 1,
                 end: 4
             }),
-            frameRate: 4,
+            frameRate: 6,
             repeat: -1
         })
-        this.anims.play('enemyidle');
+        this.anims.play('enemyidle_atlas_anim');
 
     }
 
