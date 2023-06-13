@@ -26,8 +26,8 @@ class Tutorial_2 extends Phaser.Scene {
         this.add.text(game.config.width/2, game.config.height/2 - 95, 'Beware of the Monoliths.', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 - 55, 'Make sure to pass the gaps in-between.', menuConfig).setOrigin(0.5);
 
-        this.add.text(game.config.width/2, game.config.height/2 + 25, 'Always shoot the diamonds that block your way.', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 65, 'Touching them means instant death', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 25, 'The Diamonds are dangerous.', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 65, 'Blast them if they get in your way.', menuConfig).setOrigin(0.5);
 
 
         menuConfig.backgroundColor = '#fcc603'
