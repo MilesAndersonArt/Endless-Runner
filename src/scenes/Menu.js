@@ -26,8 +26,8 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: 'Courier New',
             fontSize: '28px',
-            backgroundColor: '#000000',
-            color: '#FFFFFF',
+            backgroundColor: '#FFFFFF',
+            color: '#000000',
             align: 'center',
             padding: {
                 top: 5,
@@ -88,7 +88,7 @@ class Menu extends Phaser.Scene {
 
   }
   updateMenu(current, next, scene){
-    current.setColor('#FFFFFF');
+    current.setColor('#000000');
     current.setShadowBlur(0);
     next.setColor('#FF0000');
     next.setShadowBlur(10);
