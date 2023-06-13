@@ -36,15 +36,35 @@ class Play extends Phaser.Scene {
         this.redpanel = this.add.tileSprite(0, 0, 840, 545, 'redpanel').setOrigin(0, 0);
         // white UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0xffffff).setOrigin(0, 0);
-        // // black borders
-        // this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0 ,0);
-        // this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x000000).setOrigin(0 ,0);
-        // this.add.rectangle(0, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
-        // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0 ,0);
-
         // add Player
         this.player = new Player(this, game.config.width/8, game.config.height/4, 'player').setOrigin(0.5, 0);
         this.player.body.setSize(65, 59);
+
+        // initialize score
+        this.p1Score = 0;
+
+        //create score timer
+        this.scoreTimer = this.time.addEvent({
+            delay: 1, // delaying 1 millisecond
+            callback: this.updateScore,
+            callbackScope: this,
+            loop: true
+        });
+
+        // display score
+        let scoreConfig = {
+            fontFamily: 'Courier New',
+            fontSize: '28px',
+            backgroundColor: '#000000',
+            color: '#FFFFFF',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5, 
+            },
+            fixedWidth: 200
+        }
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, 'Score: ' + this.p1Score, scoreConfig);
 
         // ANIMATION CONFIG
         // laser shooting animation
@@ -146,6 +166,7 @@ class Play extends Phaser.Scene {
         // Laser-Enemy Collision
         this.physics.add.collider(this.lasers, this.enemies, this.LaserEnemyCollision, null, this);
 
+
         // SET UP KEYBOARD INPUT
         // console.log('initializing keys');
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -155,23 +176,6 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         // console.log('keys initialized');
 
-
-        // initialize score
-        // this.p1Score = 0;
-        // display score
-        let scoreConfig = {
-            fontFamily: 'Courier New',
-            fontSize: '28px',
-            backgroundColor: '#000000',
-            color: '#FFFFFF',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5, 
-            },
-            fixedWidth: 100
-        }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);        
         // GAME OVER flag
         this.gameOver = false;
 
@@ -245,9 +249,15 @@ class Play extends Phaser.Scene {
 
         if(!this.gameOver) {
             this.player.update(); // update p1
+            // increase score by 1 for every millisecond
+            this.p1Score += this.scoreTimer.getElapsedSeconds();
+            // Update the score display
+            this.scoreLeft.text = 'Score: ' + Math.floor(this.pqScore * 1000);
+
             // Fire laser
             if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
                 this.shootLaser();
+                
             }
             this.lasers.getChildren().forEach((laser) => {
                 if (laser.active) {
@@ -280,9 +290,31 @@ class Play extends Phaser.Scene {
             this.enemies.getChildren().forEach(function (enemy) {
                 enemy.setVelocityX(0);
             });
-
+            let scoreConfig = {
+                fontFamily: 'Courier New',
+                fontSize: '28px',
+                backgroundColor: '#000000',
+                color: '#FFFFFF',
+                align: 'center',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+                fixedWidth: 0
+            }   
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACE to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+        } if (this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            highscore = Math.max(this.p1Score, highscore)
+            this.scene.restart();
+            this.gameOver = false;
+        } if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            highscore = Math.max(this.p1Score)
+            this.scene.start("menuScene");
+            this.gameOver = false;
         }
     }
+
 
     shootLaser() {
         // Get player position
@@ -341,14 +373,19 @@ class Play extends Phaser.Scene {
         }, this);
 
         // Increase the player's score
-        this.p1Score += enemy.points;
+        this.p1Score += 300;
         // Update the score display
-        this.scoreLeft.text = this.p1Score;
+        this.scoreLeft.text = String(this.p1Score);
 
         // sfx
         let test = Math.floor(Math.random() * 4) + 1;
         let enemydeathsfx = 'sfx_explosion_' + test;
         this.sound.play(enemydeathsfx);
     }
+    
+    updateScore() {if (!this.gameOver) {
+        this.p1Score ++;
+        this.scoreLeft.text = 'Score: ' + this.p1Score;
+    }}
 
 }

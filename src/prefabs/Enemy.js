@@ -8,7 +8,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.body.setSize(this.width / 2, this.height / 2); // Set the physics body size
         this.body.setOffset(0, 0); // Set the physics body offsets
         this.body.immovable = true;
-        this.points = pointValue;
+        this.points = 300;
 
         // may need to fix movespeed
         this.movespeed = speed;
