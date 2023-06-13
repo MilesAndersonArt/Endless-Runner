@@ -27,8 +27,6 @@ class Credits extends Phaser.Scene {
         this.add.text(game.config.width/2, game.config.height/2 - 30, 'Music - “8 Bit Raceway” by Wizwars', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 30, '2001: A Space Odyssey is', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 90, 'owned by Stanley Kubrick', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 150, 'Special Thanks:', menuConfig).setOrigin(0.5);
-
         
 
         menuConfig.backgroundColor = '#fcc603'

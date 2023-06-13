@@ -19,8 +19,13 @@
       the laser and enemy. For me, it was one of the hardest parts to make.
 
     Sources:
+    - Sound Effects created in jsfxr
+    - "8 Bit Raceway" by Wizwars. Downloaded from Free Music Archive.
+      Link: https://freemusicarchive.org/music/Wizwars/Game_Boy_Rock/04_8_Bit_Raceway/
+    - Pipe Generator mechanic borrowed from “How to Make Flappy Bird in Javascript with Phaser”
+      by Thomas Palef: https://medium.com/@thomaspalef/how-to-make-flappy-bird-in-javascript-with-phaser-857fc3ae443c
+    - 2001: A Space Odyssey belongs to Stanley Kubrick
     - Inspired by "BLAST EM" by Rusty Cage
-    - 
 */ 
 
 let config = {
