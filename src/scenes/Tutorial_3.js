@@ -23,7 +23,7 @@ class Tutorial_3 extends Phaser.Scene {
         }
         this.add.text(game.config.width/2, game.config.height/2 - 180, 'SCORING', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 - 95, 'The game is endless.', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 - 55, 'You are challenged by how long', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - 55, 'You are scored by how long', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 - 15, 'you last in the Stargate', menuConfig).setOrigin(0.5);
 
         this.add.text(game.config.width/2, game.config.height/2 + 50, 'Shooting Diamonds are worth 300 points', menuConfig).setOrigin(0.5);

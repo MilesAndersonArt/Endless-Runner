@@ -3,12 +3,23 @@
     Time Taken: 22 hours 
     
     Creative Tilt:
-    - A technical feature that I was proud of was the random monolith generator in the game, which was based off the random pipe generation mechanic from Flappy Bird.
-    - Inspired by Rusty Cage’s song “BLAST EM,” the game is a parodic tribute to the Stargate Sequence from Stanley Kubrick's 1968 film 2001: A Space Odyssey.
-      My artistic goal for the project was to subvert the dread tone of the original scene by reframing it as a game invoking feelings of challenge, optimism and excitement.
-    - Although a small technical feature, I was proud that I created the collision detection between the laser and the enemy.
- 
+    - Inspired by Rusty Cage’s song “BLAST EM,” the game is a parodic tribute to the Stargate sequence from 2001: A Space Odyssey.
+    - As an Endless Runner game, I tried to make a unique challenge for the genre through
+      the random monolith generator, the random enemy spawn points, and the shooting mechanic.
+      As a result, I was hoping to make a game that was simple, addicting and challenging altogether.
+    - An artistic goal I had in mind was to subvert the experience of watching Stargate sequence by
+      having the game be more upbeat in contrast to the scene's ominous tone.
+    - A technical feature that I was proud of was the random monolith generator in the game.
+      Using Thomas Palef's tutorial, I tried to emulate the pipe generator from Flappy Bird because
+      I thought it would be an interesting obstacle given the genre.
+    - I attempted to make a scoring system based on how much time the player spent playing the game
+      (in milliseconds), but the score display turned out to be frustrating in which I decided to 
+      leave it be for now.
+    - Although a small technical feature, I was proud when I implemented the collision detection between 
+      the laser and enemy. For me, it was one of the hardest parts to make.
+
     Sources:
+    - Inspired by "BLAST EM" by Rusty Cage
     - 
 */ 
 
